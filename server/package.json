@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "new-migration": "npx prisma migrate dev",
-    "prisma-studio": "npx prisma studio"
+    "prisma-studio": "npx prisma studio",
+    "prisma-generate-er": "npx prisma generate",
+    "prisma-seed": "npx prisma db seed"
   },
   "keywords": [],
   "author": "victordev13",
@@ -18,7 +20,12 @@
     "typescript": "^4.9.4"
   },
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^9.3.0",
     "prisma": "^4.9.0",
+    "prisma-erd-generator": "^1.2.5",
     "tsx": "^3.12.2"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   }
 }
