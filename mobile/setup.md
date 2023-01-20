@@ -4,6 +4,7 @@ Setup Mobile
 Packages:
  - [expo](https://expo.dev)
  - [Nativewind](https://nativewind.dev) (UI with tailwindcss)
+ - [React Navigation](https://reactnavigation.org/) (Navigation)
 
 Setup Expo app
  - `npx create-expo-app mobile --template`
@@ -18,3 +19,8 @@ Setup Nativewind in expo
    - `npx tailwindcss init`
  - `className` does not exist by default
    - how to resolve: [https://www.nativewind.dev/getting-started/typescript](https://www.nativewind.dev/getting-started/typescript)
+
+Setup React Navigation
+ - `npm install @react-navigation/native`
+ - `npx expo install react-native-screens react-native-safe-area-context`
+ - `npm install @react-navigation/native-stack` (Stack navigation)
