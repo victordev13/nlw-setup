@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import * as Popover from '@radix-ui/react-popover';
 import ProgressBar from './ProgressBar';
 import clsx from 'clsx';
+import { CheckBox } from './CheckBox';
 
 const between = (val: number, gte: number, lt: number) =>
   val >= gte && val < lt;
@@ -25,7 +26,8 @@ export function HabitDay({ children, completed, amount }: Props) {
           'w-10 h-10 bg-zinc-900 border-2 border-zinc-800 rounded-lg',
           {
             'bg-zinc-900 border-zinc-800': completedPercentage === 0,
-            'bg-violet-900 border-violet-700': completedPercentage > 0 && completedPercentage < 20,
+            'bg-violet-900 border-violet-700':
+              completedPercentage > 0 && completedPercentage < 20,
             'bg-violet-800 border-violet-600': between(
               completedPercentage,
               20,
@@ -55,6 +57,14 @@ export function HabitDay({ children, completed, amount }: Props) {
           </span>
 
           <ProgressBar progress={completedPercentage} />
+
+          <div className='mt-6 flex flex-col gap-3'>
+            <CheckBox>
+              <span className='font-semibold text-xl text-white leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400'>
+                Beber café
+              </span>
+            </CheckBox>
+          </div>
 
           <Popover.Arrow
             height={8}
