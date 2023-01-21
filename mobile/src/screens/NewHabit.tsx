@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
+  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -10,6 +11,7 @@ import { BackButton } from '../components/BackButton';
 import { CheckBox } from '../components/Checkbox';
 import { Feather } from '@expo/vector-icons';
 import colors from 'tailwindcss/colors';
+import { api } from '../lib/axios';
 
 const availableWeekDays = [
   'Domingo',
@@ -22,6 +24,7 @@ const availableWeekDays = [
 ];
 
 export function NewHabit() {
+  const [title, setTitle] = useState('');
   const [weekDays, setWeekDays] = useState<number[]>([]);
 
   function handleToggleWeekDay(weekDayIndex: number) {
@@ -33,6 +36,30 @@ export function NewHabit() {
     }
 
     setWeekDays((prevState) => [...prevState, weekDayIndex]);
+  }
+
+  async function handleCreateNewHabit() {
+    try {
+      if (!title.trim()) {
+        Alert.alert('Novo hábito', 'Informe o nome do hábito');
+        return;
+      }
+
+      if (weekDays.length === 0) {
+        Alert.alert('Novo hábito', 'Selecione ao menos um dia da semana');
+        return;
+      }
+
+      await api.post('habits', { title, weekDays });
+
+      setTitle('');
+      setWeekDays([]);
+
+      Alert.alert('Novo hábito', 'Hábito criado com sucesso');
+    } catch (error) {
+      console.log(error);
+      Alert.alert('Novo hábito', 'Não foi possível criar o novo hábito');
+    }
   }
 
   return (
@@ -55,6 +82,8 @@ export function NewHabit() {
           placeholder='dormir cedo, ir à academia...'
           className='h-12 pl-4 rounded-lg mt-3 bg-zinc-900 text-white border-2 border-zinc-800 focus:border-green-600'
           placeholderTextColor={colors.zinc[400]}
+          value={title}
+          onChangeText={setTitle}
         />
 
         <Text className='font-semibold mt-4 mb-3 text-white text-base'>
@@ -72,6 +101,7 @@ export function NewHabit() {
         <TouchableOpacity
           className='w-full h-14 flex-row items-center justify-center bg-green-600 rounded-md mt-6'
           activeOpacity={0.7}
+          onPress={() => handleCreateNewHabit()}
         >
           <Feather
             name='check'

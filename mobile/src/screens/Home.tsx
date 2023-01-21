@@ -1,7 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import { Text, View, ScrollView } from 'react-native';
+import { AxiosError } from 'axios';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { Text, View, ScrollView, Alert } from 'react-native';
 import HabitDay, { DAY_SIZE } from '../components/HabitDay';
 import Header from '../components/Header';
+import { Loading } from '../components/Loading';
+import { api } from '../lib/axios';
 import { generateDatesFromYearBeginning } from '../utils/generateDatesFromYearBeginning';
 
 const weekDays = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
@@ -9,8 +14,41 @@ const datesFromYearStart = generateDatesFromYearBeginning();
 const minimumSummaryDateSizes = 18 * 5;
 const amountOfDaysToFill = minimumSummaryDateSizes - datesFromYearStart.length;
 
+type Summary = Array<{
+  id: string;
+  date: string;
+  amount: number;
+  completed: number;
+}>;
+
 export function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [summary, setSummary] = useState<Summary>([]);
+
   const { navigate } = useNavigation();
+
+  async function fetchSummary() {
+    setIsLoading(true);
+
+    try {
+      const { data } = await api.get('summary');
+      console.log(data);
+      setSummary(data);
+    } catch (error) {
+      Alert.alert('Ops', 'Não conseguimos buscar os seus hábitos😢');
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchSummary();
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <View className='flex-1 bg-background px-8 pt-16'>
@@ -32,12 +70,22 @@ export function Home() {
         contentContainerStyle={{ paddingBottom: 100 }}
       >
         <View className='flex-row flex-wrap'>
-          {datesFromYearStart.map((date) => (
-            <HabitDay
-              key={date.toISOString()}
-              onPress={() => navigate('habit', { date: date.toISOString() })}
-            />
-          ))}
+          {datesFromYearStart.map((date) => {
+            const dayHabits = summary.find((day) =>
+              dayjs(date).isSame(day.date, 'day')
+            );
+
+            return (
+              <HabitDay
+                key={date.toISOString()}
+                onPress={() => navigate('habit', { date: date.toISOString() })}
+                date={date}
+                amountOfHabits={dayHabits?.amount}
+                amountCompleted={dayHabits?.completed}
+              />
+            );
+          })}
+
           {amountOfDaysToFill > 0 &&
             Array.from({ length: amountOfDaysToFill }).map((_, index) => (
               <View
