@@ -2,22 +2,33 @@ import dayjs from 'dayjs';
 import * as Popover from '@radix-ui/react-popover';
 import ProgressBar from './ProgressBar';
 import clsx from 'clsx';
-import { CheckBox } from './CheckBox';
+import { DayHabitsList } from './DayHabitsList';
+import { useState } from 'react';
 
 const between = (val: number, gte: number, lt: number) =>
   val >= gte && val < lt;
 
 interface Props {
-  children: Date;
-  completed: number;
-  amount: number;
+  date: Date;
+  defaultCompleted?: number;
+  amount?: number;
 }
 
-export function HabitDay({ children, completed, amount }: Props) {
-  const dayAndMonth = dayjs(children).format('DD/MM');
-  const weekDay = dayjs(children).format('dddd');
+export function HabitDay({ date, defaultCompleted = 0, amount = 0 }: Props) {
+  const [completed, setCompleted] = useState(defaultCompleted);
 
-  const completedPercentage = Math.round((completed / amount) * 100);
+  const dayAndMonth = dayjs(date).format('DD/MM');
+  const weekDay = dayjs(date).format('dddd');
+
+  const completedPercentage =
+    amount > 0 ? Math.round((completed / amount) * 100) : 0;
+
+  const today = dayjs().startOf('day').toDate();
+  const isCurrentDay = dayjs(date).isSame(today);
+
+  function handleCompletedChange(completed: number) {
+    setCompleted(completed);
+  }
 
   return (
     <Popover.Root>
@@ -44,6 +55,7 @@ export function HabitDay({ children, completed, amount }: Props) {
               80
             ),
             'bg-violet-500 border-violet-400': completedPercentage >= 80,
+            ['border-white border-4']: isCurrentDay,
           }
         )}
         title={dayAndMonth}
@@ -58,14 +70,10 @@ export function HabitDay({ children, completed, amount }: Props) {
 
           <ProgressBar progress={completedPercentage} />
 
-          <div className='mt-6 flex flex-col gap-3'>
-            <CheckBox>
-              <span className='font-semibold text-xl text-white leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400'>
-                Beber café
-              </span>
-            </CheckBox>
-          </div>
-
+          <DayHabitsList
+            date={date}
+            onCompletedChange={handleCompletedChange}
+          />
           <Popover.Arrow
             height={8}
             width={16}
