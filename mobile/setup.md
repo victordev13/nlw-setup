@@ -5,6 +5,7 @@ Packages:
  - [expo](https://expo.dev)
  - [Nativewind](https://nativewind.dev) (UI with tailwindcss)
  - [React Navigation](https://reactnavigation.org/) (Navigation)
+ - [React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/) (Animations)
 
 Setup Expo app
  - `npx create-expo-app mobile --template`
