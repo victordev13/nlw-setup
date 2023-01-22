@@ -61,7 +61,7 @@ export default function NewHabitForm() {
         type='text'
         id='title'
         placeholder='dormir cedo, ir à academia...'
-        className='p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400'
+        className='p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400  transition-colors focus:outline-none focus:ring-2 focus:ring-violet-700 focus:ring-offset-2 focus:ring-offset-zinc-900'
         value={title}
         onChange={(event) => setTitle(event.target.value)}
         required
@@ -89,7 +89,7 @@ export default function NewHabitForm() {
 
       <button
         type='submit'
-        className='mt-6 rounded-lg p-4 flex gap-3 items-center font-semibold bg-green-600 justify-center hover:bg-green-500'
+        className='mt-6 rounded-lg p-4 flex gap-3 items-center font-semibold bg-green-600 justify-center hover:bg-green-500 transition-colors transition-colors focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-zinc-900'
       >
         <Check
           size={20}
