@@ -1,7 +1,13 @@
 NLW Setup
 ---
- - [server](./server)  
+ - [server](./server)   
  - [web](./web)
  - [mobile](./mobile)
 
 > Figma template: https://www.figma.com/community/file/1195326661124171197
+
+To Do
+---
+ - [ ] Authentication
+ - [ ] Push notifications / service workers
+ - [ ] Public profile
