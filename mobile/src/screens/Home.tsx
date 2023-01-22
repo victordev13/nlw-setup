@@ -1,7 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
-import { AxiosError } from 'axios';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Text, View, ScrollView, Alert } from 'react-native';
 import HabitDay, { DAY_SIZE } from '../components/HabitDay';
 import Header from '../components/Header';
@@ -42,9 +41,11 @@ export function Home() {
     }
   }
 
-  useEffect(() => {
-    fetchSummary();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchSummary();
+    }, [])
+  );
 
   if (isLoading) {
     return <Loading />;
